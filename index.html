@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS5 Controller Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <div class="status-bar">
+      <div id="connection-status" class="status disconnected">
+        <span class="status-dot"></span>
+        <span class="status-text">Connect Controller</span>
+      </div>
+      <button id="scan-btn" class="scan-btn">Scan for Controller</button>
+      <label class="raw-toggle-label" style="margin-left:8px; display:inline-flex; align-items:center; gap:6px;">
+        <input type="checkbox" id="raw-toggle" />
+        <span>Show raw data</span>
+      </label>
+      <div class="instruction">
+        1. Connect via USB Cable or pair via OS Bluetooth.<br>
+        2. Click anywhere on this page to focus.<br>
+        3. Press buttons on controller to wake it up and appear in the scanner.
+      </div>
+    </div>
+
+    <div class="controller-container">
+      <div class="controller-body">
+        <!-- Left Handle -->
+        <div class="handle left-handle"></div>
+        <!-- Right Handle -->
+        <div class="handle right-handle"></div>
+
+        <!-- Center Body -->
+        <div class="center-body">
+          <div class="touchpad" id="touchpad"></div>
+          <div class="speaker-grill"></div>
+          <div class="ps-button" id="btn-ps">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path fill="currentColor"
+                d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M13,4V10H15V4M9,4V10H11V4M12,11.5L10,13.5L11,14.5L12,13.5L13,14.5L14,13.5L12,11.5Z" />
+            </svg>
+          </div>
+          <div class="mute-button" id="btn-mute"></div>
+        </div>
+
+        <!-- D-Pad -->
+        <div class="dpad-group">
+          <div class="dpad-btn up" id="btn-up"></div>
+          <div class="dpad-btn right" id="btn-right"></div>
+          <div class="dpad-btn down" id="btn-down"></div>
+          <div class="dpad-btn left" id="btn-left"></div>
+          <div class="dpad-center"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-group">
+          <div class="action-btn triangle" id="btn-triangle"></div>
+          <div class="action-btn circle" id="btn-circle"></div>
+          <div class="action-btn cross" id="btn-cross"></div>
+          <div class="action-btn square" id="btn-square"></div>
+        </div>
+
+        <!-- Analog Sticks -->
+        <div class="stick-container left-stick-container">
+          <div class="stick-base"></div>
+          <div class="stick" id="stick-left">
+            <div class="stick-cap"></div>
+          </div>
+        </div>
+        <div class="stick-container right-stick-container">
+          <div class="stick-base"></div>
+          <div class="stick" id="stick-right">
+            <div class="stick-cap"></div>
+          </div>
+        </div>
+
+        <!-- Triggers & Bumpers (Visualized as overlays or top view hints) -->
+        <div class="trigger-group left">
+          <div class="bumper" id="btn-l1">L1</div>
+          <div class="trigger" id="btn-l2">
+            <div class="trigger-fill" id="fill-l2"></div>
+            <span class="trigger-label">L2</span>
+          </div>
+        </div>
+        <div class="trigger-group right">
+          <div class="bumper" id="btn-r1">R1</div>
+          <div class="trigger" id="btn-r2">
+            <div class="trigger-fill" id="fill-r2"></div>
+            <span class="trigger-label">R2</span>
+          </div>
+        </div>
+
+        <!-- Options/Share -->
+        <div class="meta-btn share" id="btn-share">
+          <div class="icon-lines"></div>
+        </div>
+        <div class="meta-btn options" id="btn-options">
+          <div class="icon-lines"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="debug-panel">
+      <pre id="debug-output"></pre>
+      <pre id="raw-output" style="max-height:220px; overflow:auto; background:rgba(0,0,0,0.04); border-radius:6px; padding:8px; margin-top:8px; font-size:12px;"></pre>
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
