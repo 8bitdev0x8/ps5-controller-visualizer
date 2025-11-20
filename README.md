@@ -19,7 +19,6 @@ https://youtu.be/5owCAKQUuuA
   - D-Pad
   - L1/R1 and analog L2/R2 triggers
   - Left/Right sticks + press
-  - Touchpad position & clicks
 - Clean, simple on-screen layout
 
 ## 🚀 How to Use
