@@ -3,7 +3,7 @@
 A simple real-time visualizer that shows **PS5 DualSense** controller input on screen.  
 It displays button presses, stick movement, trigger pressure, and touchpad usage.
 
-![Alt text](/images/PS5.png)
+![Alt text](/Images/PS5.png)
 
 ---
 
