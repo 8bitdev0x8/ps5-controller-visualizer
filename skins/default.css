@@ -1,0 +1,384 @@
+/* Default PS5 Controller Skin */
+
+:root {
+    --controller-bg: #e0e0e0;
+    --controller-dark: #1a1a1a;
+    --accent-blue: #2d5af0;
+    --accent-pink: #f02d7d;
+    --accent-green: #2df095;
+    --accent-red: #f02d2d;
+}
+
+/* Controller Container */
+.controller-container {
+    position: relative;
+    width: 800px;
+    height: 500px;
+    transform-origin: center center;
+}
+
+.controller-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Handles */
+.handle {
+    position: absolute;
+    bottom: 50px;
+    width: 180px;
+    height: 250px;
+    background: var(--controller-bg);
+    border-radius: 40px 40px 100px 100px;
+    box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.left-handle {
+    left: 100px;
+    transform: rotate(15deg);
+}
+
+.right-handle {
+    right: 100px;
+    transform: rotate(-15deg);
+}
+
+.center-body {
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    width: 400px;
+    height: 250px;
+    background: var(--controller-bg);
+    border-radius: 20px;
+    z-index: 2;
+}
+
+/* Touchpad */
+.touchpad {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    height: 130px;
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 10px 10px 30px 30px;
+    z-index: 3;
+    transition: background 0.1s;
+    overflow: hidden;
+}
+
+.touchpad.active {
+    background: #ddd;
+    box-shadow: 0 0 15px rgba(45, 90, 240, 0.3);
+}
+
+/* D-Pad */
+.dpad-group {
+    position: absolute;
+    top: 120px;
+    left: 140px;
+    width: 100px;
+    height: 100px;
+    z-index: 4;
+}
+
+.dpad-btn {
+    position: absolute;
+    background: #333;
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    transition: all 0.1s;
+}
+
+.dpad-btn.active {
+    background: var(--accent-blue);
+    box-shadow: 0 0 10px var(--accent-blue);
+}
+
+.dpad-btn.up {
+    top: 0;
+    left: 35px;
+}
+
+.dpad-btn.down {
+    bottom: 0;
+    left: 35px;
+}
+
+.dpad-btn.left {
+    top: 35px;
+    left: 0;
+}
+
+.dpad-btn.right {
+    top: 35px;
+    right: 0;
+}
+
+.dpad-center {
+    position: absolute;
+    top: 35px;
+    left: 35px;
+    width: 30px;
+    height: 30px;
+    background: #333;
+    z-index: -1;
+}
+
+/* Action Buttons - Inverted Theme (Gray BG, White Text) */
+.action-group {
+    position: absolute;
+    top: 120px;
+    right: 140px;
+    width: 100px;
+    height: 100px;
+    z-index: 4;
+}
+
+.action-btn {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #555;
+    /* Gray background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.1s;
+    color: white;
+    /* White text */
+}
+
+.action-btn.triangle {
+    top: 0;
+    left: 35px;
+}
+
+.action-btn.cross {
+    bottom: 0;
+    left: 35px;
+}
+
+.action-btn.square {
+    top: 35px;
+    left: 0;
+}
+
+.action-btn.circle {
+    top: 35px;
+    right: 0;
+}
+
+.action-btn.triangle::after {
+    content: '▲';
+}
+
+.action-btn.cross::after {
+    content: '✕';
+}
+
+.action-btn.square::after {
+    content: '■';
+}
+
+.action-btn.circle::after {
+    content: '●';
+}
+
+/* Active State - Blue Highlight */
+.action-btn.active {
+    transform: scale(0.95);
+    background: white;
+    color: var(--accent-blue);
+    box-shadow: 0 0 15px var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+}
+
+/* Sticks */
+.stick-container {
+    position: absolute;
+    bottom: 40px;
+    width: 70px;
+    height: 70px;
+    background: #222;
+    border-radius: 50%;
+    z-index: 5;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.left-stick-container {
+    left: 260px;
+}
+
+.right-stick-container {
+    right: 260px;
+}
+
+.stick {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.05s linear;
+}
+
+.stick-cap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: #444;
+    border-radius: 50%;
+    border: 2px solid #555;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.stick.active .stick-cap {
+    background: #555;
+    border-color: var(--accent-blue);
+}
+
+.stick.pressed .stick-cap {
+    background: #222;
+    transform: translate(-50%, -50%) scale(0.9);
+}
+
+/* Triggers & Bumpers */
+.trigger-group {
+    position: absolute;
+    top: -20px;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.trigger-group.left {
+    left: 120px;
+}
+
+.trigger-group.right {
+    right: 120px;
+}
+
+.bumper {
+    width: 100px;
+    height: 30px;
+    background: #ddd;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    line-height: 30px;
+    font-size: 0.8rem;
+    color: #555;
+    transition: all 0.1s;
+}
+
+.bumper.active {
+    background: var(--accent-blue);
+    color: white;
+    box-shadow: 0 0 10px var(--accent-blue);
+}
+
+.trigger {
+    width: 80px;
+    height: 60px;
+    background: #333;
+    border-radius: 0 0 10px 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.trigger-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: var(--accent-blue);
+    opacity: 0.5;
+    transition: height 0.05s linear;
+}
+
+.trigger-label {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #888;
+    z-index: 2;
+}
+
+/* PS Button */
+.ps-button {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    z-index: 5;
+    transition: all 0.1s;
+    overflow: hidden;
+}
+
+.ps-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    /* No filter needed for colorful logo */
+}
+
+.ps-button.active {
+    background: var(--accent-blue);
+    box-shadow: 0 0 10px var(--accent-blue);
+}
+
+/* Mute Button */
+.mute-button {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.1s;
+}
+
+.mic-icon {
+    width: 16px;
+    height: 16px;
+    color: #888;
+}
+
+.mute-button.active {
+    background: orange;
+    box-shadow: 0 0 8px orange;
+}
+
+.mute-button.active .mic-icon {
+    color: white;
+}

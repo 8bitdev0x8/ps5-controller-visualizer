@@ -33,6 +33,8 @@ const ui = {
     options: document.getElementById('btn-options'),
     ps: document.getElementById('btn-ps'),
     touchpad: document.getElementById('touchpad'),
+    touchpoint: document.getElementById('touchpoint'),
+    mute: document.getElementById('btn-mute'),
 
     // Debug
     debug: document.getElementById('debug-output')
@@ -46,6 +48,13 @@ const RAW_THROTTLE_MS = 150; // throttle raw output updates to avoid spamming th
 
 const updateUI = (gamepad) => {
     if (!gamepad) return;
+
+    // Debug: Log all button presses and their indices
+    gamepad.buttons.forEach((btn, idx) => {
+        if (btn.pressed) {
+            console.log(`Button ${idx} pressed`, btn);
+        }
+    });
 
     const btns = gamepad.buttons;
     const axes = gamepad.axes;
@@ -93,6 +102,23 @@ const updateUI = (gamepad) => {
     toggle(ui.options, getButton(MAPPING.BUTTONS.OPTIONS).pressed);
     toggle(ui.ps, getButton(MAPPING.BUTTONS.PS).pressed);
     toggle(ui.touchpad, getButton(MAPPING.BUTTONS.TOUCHPAD).pressed);
+    toggle(ui.mute, getButton(MAPPING.BUTTONS.MUTE).pressed);
+
+    // Touchpoint visualization
+    // Note: Standard Gamepad API doesn't provide touch coordinates
+    // This shows the touchpoint in center when touchpad is pressed
+    // For actual touch coordinates, WebHID API would be needed
+    const touchpadPressed = getButton(MAPPING.BUTTONS.TOUCHPAD).pressed;
+    if (ui.touchpoint) {
+        if (touchpadPressed) {
+            ui.touchpoint.classList.add('visible');
+            // Center position (would need WebHID for actual coordinates)
+            ui.touchpoint.style.left = '50%';
+            ui.touchpoint.style.top = '50%';
+        } else {
+            ui.touchpoint.classList.remove('visible');
+        }
+    }
 
     // Sticks
     // Axes are usually -1 to 1. We need to translate that to CSS transform.
@@ -151,7 +177,9 @@ const showRawData = (gamepad) => {
 
 const log = (msg) => {
     const time = new Date().toLocaleTimeString();
-    ui.debug.textContent = `[${time}] ${msg}\n` + ui.debug.textContent;
+    if (ui.debug) {
+        ui.debug.textContent = `[${time}] ${msg}\n` + ui.debug.textContent;
+    }
     console.log(msg);
 };
 
