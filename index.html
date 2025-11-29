@@ -3,11 +3,10 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <!-- Favicon removed: vite.svg not present -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PS5 Controller Visualizer</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="skins/default.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
@@ -15,99 +14,49 @@
 
 <body>
   <div id="app">
-    <!-- Hidden UI Elements (Required for JS logic) -->
-    <div class="status-bar" style="display:none;">
-      <div id="connection-status" class="status disconnected">
-        <span class="status-dot"></span>
-        <span class="status-text">Connect Controller</span>
-      </div>
-      <button id="scan-btn" class="scan-btn">Scan for Controller</button>
-      <label class="raw-toggle-label">
-        <input type="checkbox" id="raw-toggle" />
-        <span>Show raw data</span>
-      </label>
-      <div class="instruction">
-        1. Connect via USB Cable or pair via OS Bluetooth.<br />
-        2. Click anywhere on this page to focus.<br />
-        3. Press buttons on controller to wake it up and appear in the scanner.
-      </div>
-    </div>
+    
 
-    <div class="controller-container">
-      <div class="controller-body">
-        <!-- Left Handle -->
-        <div class="handle left-handle"></div>
-        <!-- Right Handle -->
-        <div class="handle right-handle"></div>
-        <!-- Center Body -->
-        <div class="center-body">
-          <div class="touchpad" id="touchpad">
-            <div class="touchpoint" id="touchpoint"></div>
-          </div>
-          <div class="speaker-grill"></div>
-          <div class="ps-button" id="btn-ps">
-            <img src="/Images/PS_Color.png" alt="PS Logo" class="ps-logo" />
-          </div>
-          <div class="mute-button" id="btn-mute">
-            <svg viewBox="0 0 24 24" width="16" height="16" class="mic-icon">
-              <path fill="currentColor"
-                d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z" />
-            </svg>
-          </div>
-        </div>
-        <!-- D-Pad -->
-        <div class="dpad-group">
-          <div class="dpad-btn up" id="btn-up"></div>
-          <div class="dpad-btn right" id="btn-right"></div>
-          <div class="dpad-btn down" id="btn-down"></div>
-          <div class="dpad-btn left" id="btn-left"></div>
-        </div>
-        <!-- Action Buttons -->
-        <div class="action-group">
-          <div class="action-btn triangle" id="btn-triangle"></div>
-          <div class="action-btn circle" id="btn-circle"></div>
-          <div class="action-btn cross" id="btn-cross"></div>
-          <div class="action-btn square" id="btn-square"></div>
-        </div>
-        <!-- Analog Sticks -->
-        <div class="stick-container left-stick-container">
-          <div class="stick-base"></div>
-          <div class="stick" id="stick-left">
-            <div class="stick-cap"></div>
-          </div>
-        </div>
-        <div class="stick-container right-stick-container">
-          <div class="stick-base"></div>
-          <div class="stick" id="stick-right">
-            <div class="stick-cap"></div>
-          </div>
-        </div>
-        <!-- Triggers & Bumpers -->
-        <div class="trigger-group left">
-          <div class="bumper" id="btn-l1">L1</div>
-          <div class="trigger" id="btn-l2">
-            <div class="trigger-fill" id="fill-l2"></div>
-            <span class="trigger-label">L2</span>
-          </div>
-        </div>
-        <div class="trigger-group right">
-          <div class="bumper" id="btn-r1">R1</div>
-          <div class="trigger" id="btn-r2">
-            <div class="trigger-fill" id="fill-r2"></div>
-            <span class="trigger-label">R2</span>
-          </div>
-        </div>
-        <!-- Options / Share -->
-        <div class="meta-btn share" id="btn-share">
-          <div class="icon-lines"></div>
-        </div>
-        <div class="meta-btn options" id="btn-options">
-          <div class="icon-lines"></div>
-        </div>
-        <!-- Add touchpad press indicator -->
-        <div id="touchpad-indicator"
-          style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background-color: rgba(0, 0, 0, 0.5); border-radius: 50%; pointer-events: none;"></div>
+    <!-- GamepadViewer-style PS5/DualSense skin -->
+    <div class="controller ps5" id="gv-controller">
+      <div class="sticks">
+        <div class="stick left" id="gv-stick-left"></div>
+        <div class="stick right" id="gv-stick-right"></div>
       </div>
+
+      <div class="abxy">
+        <div class="button a" id="gv-a"></div>
+        <div class="button b" id="gv-b"></div>
+        <div class="button x" id="gv-x"></div>
+        <div class="button y" id="gv-y"></div>
+      </div>
+
+      <div class="dpad">
+        <div class="face up" id="gv-up"></div>
+        <div class="face right" id="gv-right"></div>
+        <div class="face down" id="gv-down"></div>
+        <div class="face left" id="gv-left"></div>
+      </div>
+
+      <div class="arrows">
+        <div class="back" id="gv-back"></div>
+        <div class="start" id="gv-start"></div>
+      </div>
+
+      <div class="bumpers">
+        <div class="bumper left" id="gv-lb"></div>
+        <div class="bumper right" id="gv-rb"></div>
+      </div>
+
+      <div class="triggers">
+        <div class="trigger left" id="gv-lt"></div>
+        <div class="trigger right" id="gv-rt"></div>
+      </div>
+
+      <!-- PS button indicator -->
+      <div class="ps" id="gv-ps"></div>
+
+      <!-- Touchpad click indicator -->
+      <div class="touchpad" id="gv-touchpad"></div>
     </div>
   </div>
   <script type="module" src="/main.js"></script>

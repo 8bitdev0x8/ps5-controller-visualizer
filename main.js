@@ -1,150 +1,166 @@
 import { ControllerManager, MAPPING } from './controller.js';
 
 const ui = {
-    status: document.getElementById('connection-status'),
-    statusText: document.querySelector('.status-text'),
-
-    // Buttons
-    cross: document.getElementById('btn-cross'),
-    circle: document.getElementById('btn-circle'),
-    square: document.getElementById('btn-square'),
-    triangle: document.getElementById('btn-triangle'),
-
-    // D-Pad
-    up: document.getElementById('btn-up'),
-    down: document.getElementById('btn-down'),
-    left: document.getElementById('btn-left'),
-    right: document.getElementById('btn-right'),
-
-    // Triggers/Bumpers
-    l1: document.getElementById('btn-l1'),
-    r1: document.getElementById('btn-r1'),
-    l2: document.getElementById('btn-l2'),
-    r2: document.getElementById('btn-r2'),
-    l2Fill: document.getElementById('fill-l2'),
-    r2Fill: document.getElementById('fill-r2'),
-
-    // Sticks
-    stickLeft: document.getElementById('stick-left'),
-    stickRight: document.getElementById('stick-right'),
-
-    // Meta
-    share: document.getElementById('btn-share'),
-    options: document.getElementById('btn-options'),
-    ps: document.getElementById('btn-ps'),
-    touchpad: document.getElementById('touchpad'),
-    touchpoint: document.getElementById('touchpoint'),
-    mute: document.getElementById('btn-mute'),
-
-    // Debug
-    debug: document.getElementById('debug-output')
+    // GamepadViewer-style PS5 skin only
+    gv: {
+        controller: document.getElementById('gv-controller'),
+        a: document.getElementById('gv-a'),
+        b: document.getElementById('gv-b'),
+        x: document.getElementById('gv-x'),
+        y: document.getElementById('gv-y'),
+        up: document.getElementById('gv-up'),
+        down: document.getElementById('gv-down'),
+        left: document.getElementById('gv-left'),
+        right: document.getElementById('gv-right'),
+        back: document.getElementById('gv-back'),
+        start: document.getElementById('gv-start'),
+        lb: document.getElementById('gv-lb'),
+        rb: document.getElementById('gv-rb'),
+        lt: document.getElementById('gv-lt'),
+        rt: document.getElementById('gv-rt'),
+        stickLeft: document.getElementById('gv-stick-left'),
+        stickRight: document.getElementById('gv-stick-right'),
+        touchpad: document.getElementById('gv-touchpad'),
+        ps: document.getElementById('gv-ps')
+    }
 };
 
-// Raw data UI elements (optional)
-const rawToggle = document.getElementById('raw-toggle');
-const rawOutput = document.getElementById('raw-output');
-let lastRawUpdate = 0;
-const RAW_THROTTLE_MS = 150; // throttle raw output updates to avoid spamming the UI
+// Calibration storage keys
+const PS_POS_KEY = 'gv-ps-pos';
+
+// Apply saved PS position if available
+(() => {
+    const el = ui.gv?.ps;
+    if (!el) return;
+    try {
+        const saved = JSON.parse(localStorage.getItem(PS_POS_KEY) || 'null');
+        if (saved && typeof saved.left === 'number' && typeof saved.top === 'number') {
+            el.style.left = `${saved.left}px`;
+            el.style.top = `${saved.top}px`;
+        }
+    } catch {}
+})();
+
+// Simple calibration: Alt+Drag the PS marker to set exact overlay position
+(() => {
+    const el = ui.gv?.ps;
+    if (!el) return;
+
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    const onMouseDown = (e) => {
+        if (!e.altKey) return; // require Alt to avoid accidental drags
+        dragging = true;
+        const rect = el.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        e.preventDefault();
+    };
+
+    const onMouseMove = (e) => {
+        if (!dragging) return;
+        const controllerRect = ui.gv.controller.getBoundingClientRect();
+        const x = e.clientX - controllerRect.left - offsetX;
+        const y = e.clientY - controllerRect.top - offsetY;
+        el.style.left = `${Math.round(x)}px`;
+        el.style.top = `${Math.round(y)}px`;
+    };
+
+    const onMouseUp = () => {
+        if (!dragging) return;
+        dragging = false;
+        // Persist
+        const left = parseInt(el.style.left || '0', 10);
+        const top = parseInt(el.style.top || '0', 10);
+        try {
+            localStorage.setItem(PS_POS_KEY, JSON.stringify({ left, top }));
+        } catch {}
+    };
+
+    el.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+})();
 
 const updateUI = (gamepad) => {
     if (!gamepad) return;
 
-    // Debug: Log all button presses and their indices
-    gamepad.buttons.forEach((btn, idx) => {
-        if (btn.pressed) {
-            console.log(`Button ${idx} pressed`, btn);
-        }
-    });
-
     const btns = gamepad.buttons;
     const axes = gamepad.axes;
 
-    // Helper to safely get button state
-    const getButton = (index) => {
-        return btns[index] || { pressed: false, value: 0 };
-    };
+    const getButton = (index) => btns[index] || { pressed: false, value: 0 };
+    const getAxis = (index) => axes[index] || 0;
+    const toggle = (el, active) => { if (el) el.classList.toggle('active', active); };
 
-    // Helper to safely get axis value
-    const getAxis = (index) => {
-        return axes[index] || 0;
-    };
+    if (ui.gv && ui.gv.controller) {
+        // Face buttons: PS5 layout mapping
+        const aPressed = getButton(MAPPING.BUTTONS.CROSS).pressed;
+        const bPressed = getButton(MAPPING.BUTTONS.CIRCLE).pressed;
+        const xPressed = getButton(MAPPING.BUTTONS.SQUARE).pressed;
+        const yPressed = getButton(MAPPING.BUTTONS.TRIANGLE).pressed;
 
-    // Helper to toggle class
-    const toggle = (el, active) => {
-        if (el) el.classList.toggle('active', active);
-    };
+        toggle(ui.gv.a, aPressed);
+        toggle(ui.gv.b, bPressed);
+        toggle(ui.gv.x, xPressed);
+        toggle(ui.gv.y, yPressed);
 
-    // Action Buttons
-    toggle(ui.cross, getButton(MAPPING.BUTTONS.CROSS).pressed);
-    toggle(ui.circle, getButton(MAPPING.BUTTONS.CIRCLE).pressed);
-    toggle(ui.square, getButton(MAPPING.BUTTONS.SQUARE).pressed);
-    toggle(ui.triangle, getButton(MAPPING.BUTTONS.TRIANGLE).pressed);
+        if (ui.gv.a) ui.gv.a.classList.toggle('pressed', aPressed);
+        if (ui.gv.b) ui.gv.b.classList.toggle('pressed', bPressed);
+        if (ui.gv.x) ui.gv.x.classList.toggle('pressed', xPressed);
+        if (ui.gv.y) ui.gv.y.classList.toggle('pressed', yPressed);
 
-    // D-Pad
-    toggle(ui.up, getButton(MAPPING.BUTTONS.UP).pressed);
-    toggle(ui.down, getButton(MAPPING.BUTTONS.DOWN).pressed);
-    toggle(ui.left, getButton(MAPPING.BUTTONS.LEFT).pressed);
-    toggle(ui.right, getButton(MAPPING.BUTTONS.RIGHT).pressed);
+        // D-Pad
+        toggle(ui.gv.up, getButton(MAPPING.BUTTONS.UP).pressed);
+        toggle(ui.gv.down, getButton(MAPPING.BUTTONS.DOWN).pressed);
+        toggle(ui.gv.left, getButton(MAPPING.BUTTONS.LEFT).pressed);
+        toggle(ui.gv.right, getButton(MAPPING.BUTTONS.RIGHT).pressed);
 
-    // Bumpers
-    toggle(ui.l1, getButton(MAPPING.BUTTONS.L1).pressed);
-    toggle(ui.r1, getButton(MAPPING.BUTTONS.R1).pressed);
+        // Back/Start (Share/Options)
+        toggle(ui.gv.back, getButton(MAPPING.BUTTONS.SHARE).pressed);
+        toggle(ui.gv.start, getButton(MAPPING.BUTTONS.OPTIONS).pressed);
 
-    // Triggers (Analog)
-    const l2Value = getButton(MAPPING.BUTTONS.L2).value;
-    const r2Value = getButton(MAPPING.BUTTONS.R2).value;
+        // Touchpad click indicator
+        const touchpadPressed = getButton(MAPPING.BUTTONS.TOUCHPAD).pressed;
+        toggle(ui.gv.touchpad, touchpadPressed);
 
-    if (ui.l2Fill) ui.l2Fill.style.height = `${l2Value * 100}%`;
-    if (ui.r2Fill) ui.r2Fill.style.height = `${r2Value * 100}%`;
+        // PS button indicator
+        const psPressed = getButton(MAPPING.BUTTONS.PS).pressed;
+        toggle(ui.gv.ps, psPressed);
 
-    // Meta
-    toggle(ui.share, getButton(MAPPING.BUTTONS.SHARE).pressed);
-    toggle(ui.options, getButton(MAPPING.BUTTONS.OPTIONS).pressed);
-    toggle(ui.ps, getButton(MAPPING.BUTTONS.PS).pressed);
-    toggle(ui.touchpad, getButton(MAPPING.BUTTONS.TOUCHPAD).pressed);
-    toggle(ui.mute, getButton(MAPPING.BUTTONS.MUTE).pressed);
+        // Bumpers
+        const lbPressed = getButton(MAPPING.BUTTONS.L1).pressed;
+        const rbPressed = getButton(MAPPING.BUTTONS.R1).pressed;
+        toggle(ui.gv.lb, lbPressed);
+        toggle(ui.gv.rb, rbPressed);
+        if (ui.gv.lb) ui.gv.lb.classList.toggle('pressed', lbPressed);
+        if (ui.gv.rb) ui.gv.rb.classList.toggle('pressed', rbPressed);
 
-    // Touchpoint visualization
-    // Note: Standard Gamepad API doesn't provide touch coordinates
-    // This shows the touchpoint in center when touchpad is pressed
-    // For actual touch coordinates, WebHID API would be needed
-    const touchpadPressed = getButton(MAPPING.BUTTONS.TOUCHPAD).pressed;
-    if (ui.touchpoint) {
-        if (touchpadPressed) {
-            ui.touchpoint.classList.add('visible');
-            // Center position (would need WebHID for actual coordinates)
-            ui.touchpoint.style.left = '50%';
-            ui.touchpoint.style.top = '50%';
-        } else {
-            ui.touchpoint.classList.remove('visible');
+        // Triggers – show when value > 0
+        const gvL2 = getButton(MAPPING.BUTTONS.L2).value;
+        const gvR2 = getButton(MAPPING.BUTTONS.R2).value;
+        if (ui.gv.lt) ui.gv.lt.style.opacity = gvL2 > 0.05 ? gvL2 : 0;
+        if (ui.gv.rt) {
+            ui.gv.rt.style.opacity = gvR2 > 0.05 ? gvR2 : 0;
+            ui.gv.rt.classList.toggle('pressed', gvR2 > 0.98);
         }
-    }
 
-    // Sticks
-    // Axes are usually -1 to 1. We need to translate that to CSS transform.
-    // Max movement in pixels (approximate to stick container size)
-    const maxMove = 20;
+        // Sticks – move visually
+        const maxMoveGV = 15;
+        const gvLx = getAxis(MAPPING.AXES.LEFT_X) * maxMoveGV;
+        const gvLy = getAxis(MAPPING.AXES.LEFT_Y) * maxMoveGV;
+        const gvRx = getAxis(MAPPING.AXES.RIGHT_X) * maxMoveGV;
+        const gvRy = getAxis(MAPPING.AXES.RIGHT_Y) * maxMoveGV;
 
-    const lx = getAxis(MAPPING.AXES.LEFT_X) * maxMove;
-    const ly = getAxis(MAPPING.AXES.LEFT_Y) * maxMove;
-    const rx = getAxis(MAPPING.AXES.RIGHT_X) * maxMove;
-    const ry = getAxis(MAPPING.AXES.RIGHT_Y) * maxMove;
+        if (ui.gv.stickLeft) ui.gv.stickLeft.style.transform = `translate(${gvLx}px, ${gvLy}px)`;
+        if (ui.gv.stickRight) ui.gv.stickRight.style.transform = `translate(${gvRx}px, ${gvRy}px)`;
 
-    if (ui.stickLeft) ui.stickLeft.style.transform = `translate(${lx}px, ${ly}px)`;
-    if (ui.stickRight) ui.stickRight.style.transform = `translate(${rx}px, ${ry}px)`;
-
-    // Stick Clicks (L3/R3)
-    const l3Pressed = getButton(MAPPING.BUTTONS.L3).pressed;
-    const r3Pressed = getButton(MAPPING.BUTTONS.R3).pressed;
-
-    if (ui.stickLeft) {
-        if (l3Pressed) ui.stickLeft.classList.add('pressed');
-        else ui.stickLeft.classList.remove('pressed');
-    }
-
-    if (ui.stickRight) {
-        if (r3Pressed) ui.stickRight.classList.add('pressed');
-        else ui.stickRight.classList.remove('pressed');
+        // Stick clicks
+        const l3Pressed = getButton(MAPPING.BUTTONS.L3).pressed;
+        const r3Pressed = getButton(MAPPING.BUTTONS.R3).pressed;
+        if (ui.gv.stickLeft) ui.gv.stickLeft.classList.toggle('pressed', l3Pressed);
+        if (ui.gv.stickRight) ui.gv.stickRight.classList.toggle('pressed', r3Pressed);
     }
 };
 
@@ -183,83 +199,12 @@ const log = (msg) => {
     console.log(msg);
 };
 
-const onConnect = (gamepad) => {
-    ui.status.classList.add('connected');
-    ui.status.classList.remove('disconnected');
-    ui.statusText.textContent = `Connected: ${gamepad.id.substring(0, 20)}...`;
-    log(`Connected: ${gamepad.id} (Index: ${gamepad.index})`);
-    log(`Mapping: "${gamepad.mapping}"`);
-
-    if (gamepad.mapping !== 'standard') {
-        log('WARNING: Mapping is not "standard". Buttons may be scrambled.');
-        log('Try using Chrome/Edge which usually normalizes PS5 controllers.');
-    }
-};
-
-const onDisconnect = () => {
-    ui.status.classList.remove('connected');
-    ui.status.classList.add('disconnected');
-    ui.statusText.textContent = 'Connect Controller';
-    log('Disconnected');
-};
-
-// Combine visual update and raw-data display into a single callback
-const combinedUpdate = (gamepad) => {
-    updateUI(gamepad);
-    showRawData(gamepad);
-};
-
-const manager = new ControllerManager(combinedUpdate, onConnect, onDisconnect);
-
-
-// Override manager's internal console.log if we want, or just rely on events.
-// Let's manually check gamepads on scan and log them.
-document.getElementById('scan-btn').addEventListener('click', () => {
-    log('Scanning for gamepads...');
-    const gamepads = navigator.getGamepads();
-    let found = false;
-    for (let i = 0; i < gamepads.length; i++) {
-        const gp = gamepads[i];
-        if (gp) {
-            log(`Found gamepad at index ${i}: ${gp.id}`);
-            found = true;
-            // Force connect if not already
-            if (manager.gamepadIndex !== i) {
-                manager.handleConnect({ gamepad: gp });
-            }
-        } else {
-            log(`Index ${i}: null`);
-        }
-    }
-    if (!found) {
-        log('No gamepads found. Press buttons on controller!');
-    }
-    manager.scanGamepads();
-});
-
-
-
-// HID connect button removed from UI; WebHID support removed from controller manager.
-
-// Always start polling
+// (Removed PS5 status/debug logic)
+// Minimal controller lifecycle
+const manager = new ControllerManager(updateUI, () => {}, () => {});
 manager.startPolling();
-log('App initialized. Waiting for controller...');
 
-// Focus tracking
-window.addEventListener('focus', () => {
-    log('Window FOCUSED. Press buttons on controller now!');
-    document.body.classList.remove('blurred');
-    manager.scanGamepads();
-});
-
-window.addEventListener('blur', () => {
-    log('Window BLURRED. Gamepad input may be ignored by browser.');
-    document.body.classList.add('blurred');
-});
-
-// Initial check
-if (document.hasFocus()) {
-    log('Window is focused.');
-} else {
-    log('Window is NOT focused. Click here!');
+// Focus window when clicking the skin
+if (ui.gv && ui.gv.controller) {
+    ui.gv.controller.addEventListener('click', () => { window.focus(); });
 }

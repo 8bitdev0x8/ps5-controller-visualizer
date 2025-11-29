@@ -124,23 +124,6 @@ export class ControllerManager {
         }
     }
 
-    // Add a function to handle touchpad press
-    handleTouchpadPress(gamepad) {
-        const touchpadPressed = gamepad.buttons[MAPPING.BUTTONS.TOUCHPAD].pressed;
-        console.log("Touchpad pressed:", touchpadPressed); // Debugging log
-
-        const touchpadIndicator = document.getElementById("touchpad-indicator");
-        if (!touchpadIndicator) {
-            console.error("Touchpad indicator element not found in DOM"); // Debugging log
-            return;
-        }
-
-        if (touchpadPressed) {
-            touchpadIndicator.style.display = "block";
-        } else {
-            touchpadIndicator.style.display = "none";
-        }
-    }
 
     tick() {
         this.pollingInterval = requestAnimationFrame(() => this.tick());
@@ -149,9 +132,7 @@ export class ControllerManager {
             const gamepads = navigator.getGamepads();
             const gamepad = gamepads[this.gamepadIndex];
             if (gamepad) {
-                console.log("Gamepad state:", gamepad); // Debugging log
                 this.onUpdate(gamepad);
-                this.handleTouchpadPress(gamepad);
             }
         } else {
             // If we are polling but have no index, try to find one (polling for connection)

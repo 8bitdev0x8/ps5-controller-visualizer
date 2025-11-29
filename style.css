@@ -9,11 +9,6 @@ body {
   background-color: var(--bg-color);
   color: white;
   font-family: 'Outfit', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  overflow: hidden;
 }
 
 #app {
@@ -24,37 +19,310 @@ body {
   align-items: center;
 }
 
-/* Hide UI elements for OBS Mode */
-.status-bar {
-  display: none !important;
+/* Remove PS5 UI helpers and focus overlay */
+
+/* (PS5 3D controller styles removed; using PS5/GamepadViewer skin) */
+
+/* -- PS5 Skin for GamepadViewer | Created by CrazyGrape -- */
+/* Adapted for in-page use in this visualizer */
+
+/* Main controller image */
+.controller.ps5 {
+  background: url(https://i.imgur.com/fJIyBwn.png);
+  width: 807px;
+  height: 651px;
+  margin-left: 0;
+  margin-top: 0;
+  position: relative;
 }
 
-/* Focus Overlay - Keep this but make it subtle or disappear quickly */
-body.blurred::after {
-  content: "CLICK TO ACTIVATE";
+/* Sticks */
+.ps5 .sticks {
+  width: 367px;
+  height: 100px;
+  left: 220px;
+  top: 333px;
+  position: absolute;
+}
+
+.ps5 .stick {
+  background: url(https://i.imgur.com/nXaGdI2.png);
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  transition: transform 0.05s linear;
+}
+
+.ps5 .stick.pressed {
+  background-position: -102px 0;
+}
+
+.ps5 .stick.right {
+  top: 0;
+  left: 267px;
+}
+
+/* ABXY */
+.ps5 .abxy {
+  width: 181px;
+  height: 181px;
+  left: 573px;
+  top: 178px;
+  position: absolute;
+}
+
+.ps5 .button {
+  background: url(https://i.imgur.com/DVqDSsJ.png);
+  width: 58px;
+  height: 58px;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.05s ease-out, transform 0.05s ease-out, filter 0.05s ease-out;
+}
+
+.ps5 .button.pressed {
+  background-position-y: -59px;
+  margin-top: 0;
+}
+
+/* Visually highlight ABXY when active (pressed in code) */
+.ps5 .button.active {
+  opacity: 1;
+  transform: translateY(1px);
+  filter: brightness(1.2);
+}
+
+.ps5 .a {
+  background-position: 0 0;
+  left: 61px;
+  top: 123px;
+}
+
+.ps5 .b {
+  background-position: -59px 0;
+  left: 123px;
+  top: 62px;
+}
+
+.ps5 .x {
+  background-position: -118px 0;
+  left: 0px;
+  top: 61px;
+}
+
+.ps5 .y {
+  background-position: -177px 0;
+  left: 61px;
+  top: 0px;
+}
+
+/* Arrows (back/start) */
+.ps5 .arrows {
+  left: 195px;
+  top: 140px;
+  width: 416px;
+  height: 57px;
+  position: absolute;
+}
+
+.ps5 .quadrant {
+  display: none;
+}
+
+.ps5 .back,
+.ps5 .start {
+  background: url(https://i.imgur.com/YJRVQxC.png);
+  width: 27px;
+  height: 57px;
+  opacity: 0;
+  position: absolute;
+}
+
+.ps5 .start {
+  background-position: 27px 0;
+  right: 0;
+}
+
+/* Show and slightly move arrows when active/pressed */
+.ps5 .back.active,
+.ps5 .start.active {
+  opacity: 1;
+  transform: translateY(1px);
+  filter: brightness(1.1);
+}
+
+/* D-pad */
+.ps5 .dpad {
+  width: 144px;
+  height: 144px;
+  left: 71px;
+  top: 196px;
+  position: absolute;
+}
+
+.ps5 .face {
+  background: url(https://i.imgur.com/hCmzXWK.png);
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.05s ease-out, transform 0.05s ease-out;
+}
+
+/* Show and slightly move d-pad arrows when active/pressed */
+.ps5 .face.active {
+  opacity: 1;
+  transform: translateY(1px);
+}
+
+.ps5 .face.up {
+  background-position: 0 -68px;
+  width: 52px;
+  height: 63px;
+  left: 46px;
+}
+
+.ps5 .face.down {
+  background-position: -54px 63px;
+  width: 52px;
+  height: 63px;
+  left: 46px;
+  top: 81px;
+}
+
+.ps5 .face.left {
+  background-position: -108px -68px;
+  width: 64px;
+  height: 52px;
+  left: -1px;
+  top: 47px;
+}
+
+.ps5 .face.right {
+  background-position: -175px -68px;
+  width: 63px;
+  height: 52px;
+  left: 81px;
+  top: 46px;
+}
+
+/* Bumpers */
+.ps5 .bumpers {
+  width: 620px;
+  height: 35px;
+  left: 93px;
+  top: 114px;
+  position: absolute;
+  z-index: 2;
+}
+
+.ps5 .bumper {
+  background: url(https://i.imgur.com/2YssqRT.png);
+  width: 110px;
+  height: 35px;
+  opacity: 0;
+  position: absolute;
+}
+
+/* Show and slightly move bumpers when active/pressed */
+.ps5 .bumper.active,
+.ps5 .bumper.pressed {
+  opacity: 1;
+  transform: translateY(1px);
+  filter: brightness(1.1);
+}
+
+/* Position left/right bumpers and set right sprite frame */
+.ps5 .bumper.left {
+  left: 0;
+}
+
+.ps5 .bumper.right {
+  right: 0; /* anchor to the right edge of bumpers container */
+  /* Use the same sprite frame as L1 and mirror it */
+  background-position: 0 0; /* base frame (LB) mirrored to become RB */
+  transform: scaleX(-1); /* mirror horizontally to create R1 from L1 */
+  transform-origin: center; /* mirror around center to keep alignment */
+}
+
+/* Use pressed frame for RB when active */
+.ps5 .bumper.right.pressed {
+  background-position: 0 -36px; /* pressed frame (LB) mirrored to become RB */
+  transform: scaleX(-1); /* keep mirrored state when pressed */
+}
+
+/* Triggers */
+.ps5 .triggers {
+  width: 619px;
+  height: 108px;
+  left: 94px;
   position: absolute;
   top: 0;
+  z-index: 1;
+}
+
+.ps5 .trigger {
+  background: url(https://i.imgur.com/LsxmGBD.png);
+  width: 111px;
+  height: 108px;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+}
+
+/* L2 on the left, R2 on the right */
+.ps5 .trigger.left {
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: white;
-  z-index: 1000;
-  pointer-events: none;
 }
 
-/* Highlight touchpad when pressed */
-.touchpad.active {
-  background: #ddd;
-  box-shadow: 0 0 15px rgba(45, 90, 240, 0.3);
+.ps5 .trigger.right {
+  background-position: -113px 0;
+  transform: rotateY(0) scaleX(1); /* ensure no flip on right trigger */
+  right: 0;
 }
 
-/* Style for touchpad press indicator */
-#touchpad-indicator {
-  z-index: 1000;
+/* Make GamepadViewer skin clickable for focus */
+#gv-controller {
+  cursor: pointer;
+}
+
+/* Touchpad indicator */
+.ps5 .touchpad {
+  position: absolute;
+  left: 310px; /* center area between dpad and ABXY */
+  top: 165px;  /* aligned roughly with arrows */
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(45, 90, 240, 0.85);
+  box-shadow: 0 0 10px rgba(45, 90, 240, 0.6);
+  opacity: 0;
+  transition: opacity 0.05s ease-out, transform 0.05s ease-out, filter 0.05s ease-out;
+  z-index: 3;
+}
+
+.ps5 .touchpad.active {
+  opacity: 1;
+  transform: translateY(1px);
+}
+
+/* PS button indicator */
+.ps5 .ps {
+  position: absolute;
+  left: 392px; /* approximate center under touchpad */
+  top: 249px;  /* nudge up slightly for better centering */
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  /* Glow overlay to match PS logo lighting */
+  background: radial-gradient(circle at 50% 50%, rgba(250,250,250,0.95) 0%, rgba(250,250,250,0.65) 45%, rgba(250,250,250,0.2) 70%, rgba(250,250,250,0) 100%);
+  box-shadow: 0 0 12px rgba(250,250,250,0.55), 0 0 20px rgba(250,250,250,0.35);
+  mix-blend-mode: screen; /* blend glow with underlying logo */
+  opacity: 0;
+  transition: opacity 0.05s ease-out, transform 0.05s ease-out, filter 0.05s ease-out;
+  z-index: 3;
+}
+
+.ps5 .ps.active {
+  opacity: 1;
+  transform: translateY(1px);
+  filter: brightness(1.0) saturate(1.0);
 }

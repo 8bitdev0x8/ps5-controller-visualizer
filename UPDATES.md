@@ -21,10 +21,8 @@
 - **Transparent Background**: The app now has a transparent background by default, making it ready for OBS Browser Source overlay.
 - **Full Window**: The controller is centered and takes up the full window.
 
-### 2. **Separate Skin System** ✅
-- **New `skins/` Directory**: Created a dedicated folder for controller skins.
-- **`skins/default.css`**: Moved all controller-specific styling here. You can now duplicate this file to create new skins (e.g., `skins/red-camo.css`) and link it in `index.html`.
-- **`style.css`**: Now only handles the main window layout and hides the UI elements.
+### 2. **Single Stylesheet** ✅
+- **`style.css`**: Consolidated all layout and controller visuals into one file. The previous `skins/` setup was removed for simplicity.
 
 ## How to Use in OBS
 1. Add a **Browser Source** in OBS.
@@ -33,7 +31,6 @@
 4. Check "Shutdown source when not visible" to save resources.
 5. The background will be transparent, showing only the controller.
 
-## How to Customize Skin
-1. Go to `skins/default.css`.
-2. Modify colors, shadows, or shapes.
-3. To create a new skin, copy `default.css` to `my-skin.css`, edit it, and change the `<link>` tag in `index.html`.
+## How to Customize Styles
+1. Edit `style.css` directly for colors, shadows, and positions.
+2. To experiment with themes, duplicate `style.css` (e.g., `style-dark.css`), update styles, and change the `<link>` tag in `index.html` to point to your alternate stylesheet.
