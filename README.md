@@ -2,9 +2,9 @@
 
 Real-time, web-based PS5 DualSense controller visualizer that shows button presses, sticks, triggers, and touchpad input on screen — perfect for adding a live controller overlay to your stream via OBS (browser source).
 
-![Alt text](/Images/PS5ControllerInterface.png)
+![Alt text](public/Images/PS5ControllerInterface.png)
 
-![Alt text](/Images/Gameplay.gif)
+![Alt text](public/Images/Gameplay.gif)
 
 ---
 
