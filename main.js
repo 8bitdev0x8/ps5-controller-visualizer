@@ -25,23 +25,7 @@ const ui = {
     }
 };
 
-// Calibration storage keys
-const PS_POS_KEY = 'gv-ps-pos';
-
-// Apply saved PS position if available
-(() => {
-    const el = ui.gv?.ps;
-    if (!el) return;
-    try {
-        const saved = JSON.parse(localStorage.getItem(PS_POS_KEY) || 'null');
-        if (saved && typeof saved.left === 'number' && typeof saved.top === 'number') {
-            el.style.left = `${saved.left}px`;
-            el.style.top = `${saved.top}px`;
-        }
-    } catch {}
-})();
-
-// (Alt+Drag calibration removed)
+// PS position is controlled via CSS.
 
 const updateUI = (gamepad) => {
     if (!gamepad) return;
@@ -123,42 +107,6 @@ const updateUI = (gamepad) => {
     }
 };
 
-// Show throttled raw data when toggle is enabled
-const showRawData = (gamepad) => {
-    if (!rawToggle || !rawToggle.checked) {
-        if (rawOutput) rawOutput.textContent = '';
-        return;
-    }
-
-    const now = Date.now();
-    if (now - lastRawUpdate < RAW_THROTTLE_MS) return;
-    lastRawUpdate = now;
-
-    try {
-        // Build a plain object to avoid browser-specific prototypes and circular refs
-        const plain = {
-            id: gamepad.id,
-            index: gamepad.index,
-            mapping: gamepad.mapping,
-            timestamp: gamepad.timestamp,
-            axes: Array.from(gamepad.axes || []),
-            buttons: (gamepad.buttons || []).map(b => ({ pressed: !!b.pressed, value: b.value }))
-        };
-        if (rawOutput) rawOutput.textContent = JSON.stringify(plain, null, 2);
-    } catch (e) {
-        if (rawOutput) rawOutput.textContent = 'Error serializing gamepad data: ' + e.message;
-    }
-};
-
-const log = (msg) => {
-    const time = new Date().toLocaleTimeString();
-    if (ui.debug) {
-        ui.debug.textContent = `[${time}] ${msg}\n` + ui.debug.textContent;
-    }
-    console.log(msg);
-};
-
-// (Removed PS5 status/debug logic)
 // Minimal controller lifecycle
 const manager = new ControllerManager(updateUI, () => {}, () => {});
 manager.startPolling();
