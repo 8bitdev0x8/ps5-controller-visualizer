@@ -6,7 +6,6 @@ Real-time, web-based PS5 DualSense controller visualizer that shows button press
 
 ![Alt text](public/Images/Gameplay.gif)
 
----
 
 ## Features
 
@@ -38,8 +37,3 @@ Real-time, web-based PS5 DualSense controller visualizer that shows button press
 
 This project is published at: `https://8bitdev0x8.github.io/ps5-controller-visualizer/` using a `gh-pages` branch.
 
-1. Build: `npm run build`
-2. Create a new orphan branch `gh-pages` and add `dist` contents at root.
-3. Push branch: `git push origin gh-pages --force`.
-
----
