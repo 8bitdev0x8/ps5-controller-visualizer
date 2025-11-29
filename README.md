@@ -15,7 +15,7 @@ https://youtu.be/5owCAKQUuuA
 ## ✨ Features
 
 - Real-time display of:
-  - Buttons (X, O, Δ, ◻)
+  - Buttons (X, O, Δ, ▢)
   - D-Pad
   - L1/R1 and analog L2/R2 triggers
   - Left/Right sticks + press
