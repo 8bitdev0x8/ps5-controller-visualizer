@@ -287,10 +287,10 @@ body {
 /* Touchpad indicator */
 .ps5 .touchpad {
   position: absolute;
-  left: 310px; /* center area between dpad and ABXY */
-  top: 165px;  /* aligned roughly with arrows */
-  width: 18px;
-  height: 18px;
+  left: 380px; /* center area between dpad and ABXY */
+  top: 200px;  /* aligned roughly with arrows */
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: rgba(45, 90, 240, 0.85);
   box-shadow: 0 0 10px rgba(45, 90, 240, 0.6);
@@ -307,15 +307,14 @@ body {
 /* PS button indicator */
 .ps5 .ps {
   position: absolute;
-  left: 392px; /* approximate center under touchpad */
-  top: 249px;  /* nudge up slightly for better centering */
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  /* Glow overlay to match PS logo lighting */
-  background: radial-gradient(circle at 50% 50%, rgba(250,250,250,0.95) 0%, rgba(250,250,250,0.65) 45%, rgba(250,250,250,0.2) 70%, rgba(250,250,250,0) 100%);
-  box-shadow: 0 0 12px rgba(250,250,250,0.55), 0 0 20px rgba(250,250,250,0.35);
-  mix-blend-mode: screen; /* blend glow with underlying logo */
+  left: 373px; /* applied from OBS ALT move */
+  top: 345px; /* applied from OBS ALT move */
+  width: 60px;
+  height: 60px;
+  background-image: url('/Images/PS_Color.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   opacity: 0;
   transition: opacity 0.05s ease-out, transform 0.05s ease-out, filter 0.05s ease-out;
   z-index: 3;
@@ -324,5 +323,5 @@ body {
 .ps5 .ps.active {
   opacity: 1;
   transform: translateY(1px);
-  filter: brightness(1.0) saturate(1.0);
+  filter: none;
 }

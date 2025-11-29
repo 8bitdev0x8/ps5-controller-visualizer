@@ -41,48 +41,7 @@ const PS_POS_KEY = 'gv-ps-pos';
     } catch {}
 })();
 
-// Simple calibration: Alt+Drag the PS marker to set exact overlay position
-(() => {
-    const el = ui.gv?.ps;
-    if (!el) return;
-
-    let dragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    const onMouseDown = (e) => {
-        if (!e.altKey) return; // require Alt to avoid accidental drags
-        dragging = true;
-        const rect = el.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
-        e.preventDefault();
-    };
-
-    const onMouseMove = (e) => {
-        if (!dragging) return;
-        const controllerRect = ui.gv.controller.getBoundingClientRect();
-        const x = e.clientX - controllerRect.left - offsetX;
-        const y = e.clientY - controllerRect.top - offsetY;
-        el.style.left = `${Math.round(x)}px`;
-        el.style.top = `${Math.round(y)}px`;
-    };
-
-    const onMouseUp = () => {
-        if (!dragging) return;
-        dragging = false;
-        // Persist
-        const left = parseInt(el.style.left || '0', 10);
-        const top = parseInt(el.style.top || '0', 10);
-        try {
-            localStorage.setItem(PS_POS_KEY, JSON.stringify({ left, top }));
-        } catch {}
-    };
-
-    el.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
-})();
+// (Alt+Drag calibration removed)
 
 const updateUI = (gamepad) => {
     if (!gamepad) return;
