@@ -6,6 +6,7 @@ Real-time, web-based PS5 DualSense controller visualizer that shows button press
 
 ![Alt text](public/Images/Gameplay.gif)
 
+---
 
 ## Features
 
@@ -32,8 +33,3 @@ Real-time, web-based PS5 DualSense controller visualizer that shows button press
 ## How to Customize Styles
 1. Edit `style.css` directly for colors, shadows, and positions.
 2. To experiment with themes, duplicate `style.css` (e.g., `style-dark.css`), update styles, and change the `<link>` tag in `index.html` to point to your alternate stylesheet.
-
-## GitHub Pages (gh-pages Branch)
-
-This project is published at: `https://8bitdev0x8.github.io/ps5-controller-visualizer/` using a `gh-pages` branch.
-
