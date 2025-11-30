@@ -6,7 +6,7 @@ Real-time, web-based PS5 DualSense controller visualizer that shows button press
 
 ![Alt text](public/Images/Gameplay.gif)
 
-![Alt text](public/images/Controller_Skin.jpg)
+![Alt text](public/Images/Controller_Skin.jpg)
 
 ## Features
 
